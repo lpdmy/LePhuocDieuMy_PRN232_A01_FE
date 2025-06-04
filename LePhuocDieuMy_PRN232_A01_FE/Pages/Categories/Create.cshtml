@@ -1,0 +1,36 @@
+﻿@page
+@model CreateModel
+@{
+    ViewData["Title"] = "Create Category";
+}
+
+<h2>Create Category</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="NewCategory.CategoryName"></label>
+        <input asp-for="NewCategory.CategoryName" class="form-control" />
+        <span asp-validation-for="NewCategory.CategoryName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NewCategory.CategoryDescription"></label>
+        <textarea asp-for="NewCategory.CategoryDescription" class="form-control"></textarea>
+        <span asp-validation-for="NewCategory.CategoryDescription" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NewCategory.ParentCategoryId"></label>
+        <input asp-for="NewCategory.ParentCategoryId" type="number" class="form-control" />
+        <span asp-validation-for="NewCategory.ParentCategoryId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group form-check">
+        <input asp-for="NewCategory.IsActive" class="form-check-input" />
+        <label asp-for="NewCategory.IsActive" class="form-check-label"></label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+<div asp-validation-summary="All" class="text-danger"></div>

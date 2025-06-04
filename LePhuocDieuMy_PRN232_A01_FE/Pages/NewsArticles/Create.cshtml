@@ -1,0 +1,34 @@
+﻿@page
+@model CreateModel
+@{
+    ViewData["Title"] = "Create News Article";
+}
+
+<h2>Create News Article</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="NewArticle.NewsTitle" class="form-label"></label>
+        <input asp-for="NewArticle.NewsTitle" class="form-control" />
+        <span asp-validation-for="NewArticle.NewsTitle" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NewArticle.Headline" class="form-label"></label>
+        <input asp-for="NewArticle.Headline" class="form-control" />
+        <span asp-validation-for="NewArticle.Headline" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NewArticle.NewsContent" class="form-label"></label>
+        <textarea asp-for="NewArticle.NewsContent" class="form-control"></textarea>
+        <span asp-validation-for="NewArticle.NewsContent" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3 form-check">
+        <input asp-for="NewArticle.NewsStatus" class="form-check-input" />
+        <label asp-for="NewArticle.NewsStatus" class="form-check-label"></label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>

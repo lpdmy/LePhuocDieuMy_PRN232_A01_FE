@@ -1,0 +1,34 @@
+﻿@page "{id:int}"
+@model UpdateModel
+@{
+    ViewData["Title"] = "Update News Article";
+}
+
+<h2>Update News Article</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Article.NewsTitle" class="form-label"></label>
+        <input asp-for="Article.NewsTitle" class="form-control" />
+        <span asp-validation-for="Article.NewsTitle" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Article.Headline" class="form-label"></label>
+        <input asp-for="Article.Headline" class="form-control" />
+        <span asp-validation-for="Article.Headline" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Article.NewsContent" class="form-label"></label>
+        <textarea asp-for="Article.NewsContent" class="form-control"></textarea>
+        <span asp-validation-for="Article.NewsContent" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3 form-check">
+        <input asp-for="Article.NewsStatus" class="form-check-input" />
+        <label asp-for="Article.NewsStatus" class="form-check-label"></label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>

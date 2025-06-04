@@ -1,0 +1,68 @@
+﻿@page "{id:int}"
+@model EditModel
+@{
+    ViewData["Title"] = "Edit Account";
+}
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-warning text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Edit Account</h4>
+        <a asp-page="Index" class="btn btn-light btn-sm">
+            <i class="bi bi-arrow-left-circle me-1"></i>Back to List
+        </a>
+    </div>
+
+    <div class="card-body">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                Please correct the errors below.
+            </div>
+        }
+
+        <form method="post" novalidate>
+            <input type="hidden" asp-for="Account.AccountId" />
+
+            <div class="mb-3">
+                <label asp-for="Account.AccountName" class="form-label"></label>
+                <input asp-for="Account.AccountName" class="form-control" placeholder="Enter full name" />
+                <span asp-validation-for="Account.AccountName" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Account.AccountEmail" class="form-label"></label>
+                <input asp-for="Account.AccountEmail" class="form-control" placeholder="Enter email address" />
+                <span asp-validation-for="Account.AccountEmail" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Account.AccountPassword" class="form-label"></label>
+                <input asp-for="Account.AccountPassword" type="password" class="form-control" placeholder="Enter password" />
+                <span asp-validation-for="Account.AccountPassword" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Account.AccountRole" class="form-label"></label>
+                <select asp-for="Account.AccountRole" class="form-select">
+                    <option value="">-- Select Role --</option>
+                    <option value="1" selected="@Model.Account.AccountRole == 1">Staff</option>
+                    <option value="2" selected="@Model.Account.AccountRole == 2">Lecturer</option>
+                </select>
+                <span asp-validation-for="Account.AccountRole" class="text-danger small"></span>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-warning me-2 text-white">
+                    <i class="bi bi-save me-1"></i>Save Changes
+                </button>
+                <a asp-page="Index" class="btn btn-secondary">
+                    <i class="bi bi-x-circle me-1"></i>Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
