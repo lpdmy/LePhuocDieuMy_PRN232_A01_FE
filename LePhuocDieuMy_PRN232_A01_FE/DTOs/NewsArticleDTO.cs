@@ -10,6 +10,10 @@
         public bool NewsStatus { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
+        public List<int> TagIds { get; set; } = new(); // <-- Thêm dòng này
+        public int AccountId { get; set; }
+
+
     }
 
 }

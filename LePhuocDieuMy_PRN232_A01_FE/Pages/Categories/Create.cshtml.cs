@@ -8,6 +8,9 @@ namespace LePhuocDieuMy_PRN232_A01_FE.Pages.Categories
     public class CreateModel : PageModel
     {
         private readonly ApiClientHelper _apiHelper;
+        [BindProperty]
+
+        public List<CategoryDTO> Categories { get; set; } = new();
 
         public CreateModel(ApiClientHelper apiHelper)
         {
@@ -33,8 +36,21 @@ namespace LePhuocDieuMy_PRN232_A01_FE.Pages.Categories
             return Page();
         }
 
-        public void OnGet()
+        public async Task OnGetAsync()
         {
+            var client = _apiHelper.CreateAuthorizedClient();
+            var response = await client.GetAsync("Category");
+
+            if (response.IsSuccessStatusCode)
+            {
+                Categories = await response.Content.ReadFromJsonAsync<List<CategoryDTO>>();
+            }
+            else
+            {
+                Categories = new List<CategoryDTO>(); // đảm bảo không null
+            }
+
+            NewCategory = new CategoryDTO(); // đảm bảo không null
         }
     }
 }

@@ -21,9 +21,13 @@
 
     <div class="form-group">
         <label asp-for="NewCategory.ParentCategoryId"></label>
-        <input asp-for="NewCategory.ParentCategoryId" type="number" class="form-control" />
+        <select asp-for="NewCategory.ParentCategoryId" class="form-control"
+                asp-items="@(new SelectList(Model.Categories, "CategoryId", "CategoryName"))">
+            <option value="">-- None --</option>
+        </select>
         <span asp-validation-for="NewCategory.ParentCategoryId" class="text-danger"></span>
     </div>
+
 
     <div class="form-group form-check">
         <input asp-for="NewCategory.IsActive" class="form-check-input" />

@@ -14,6 +14,7 @@ public class UpdateModel : PageModel
 
     [BindProperty]
     public CategoryDTO UpdatedCategory { get; set; } = new();
+    public List<CategoryDTO> Categories { get; set; } = new();
 
     [BindProperty(SupportsGet = true)]
     public int Id { get; set; }
@@ -33,6 +34,16 @@ public class UpdateModel : PageModel
             IsActive = category.IsActive
         };
 
+        var response = await client.GetAsync("Category");
+
+        if (response.IsSuccessStatusCode)
+        {
+            Categories = await response.Content.ReadFromJsonAsync<List<CategoryDTO>>();
+        }
+        else
+        {
+            Categories = new List<CategoryDTO>(); // ð?m b?o không null
+        }
         return Page();
     }
 

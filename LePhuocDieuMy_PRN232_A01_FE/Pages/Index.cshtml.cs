@@ -6,6 +6,8 @@ public class IndexModel : PageModel
 {
     public string? UserEmail { get; private set; }
     public string? Role { get; private set; }
+    public string? UserId { get; private set; }
+
 
 
     public void OnGet()
@@ -22,8 +24,14 @@ public class IndexModel : PageModel
             var roleClaim = jwtToken.Claims.FirstOrDefault(c =>
                 c.Type == ClaimTypes.Role || c.Type == "role");
 
+            var idClaim = jwtToken.Claims.FirstOrDefault(c =>
+                c.Type == ClaimTypes.NameIdentifier);
+
             UserEmail = emailClaim?.Value;
+
             Role = roleClaim?.Value;
+
+            UserId = idClaim?.Value;
 
             if (string.IsNullOrEmpty(UserEmail))
             {
@@ -32,6 +40,8 @@ public class IndexModel : PageModel
 
             // Lưu email vào Session
             HttpContext.Session.SetString("UserEmail", UserEmail);
+            HttpContext.Session.SetInt32("UserId", UserId != null ? Convert.ToInt32(UserId) : 0);
+
 
             ViewData[nameof(UserEmail)] = UserEmail;
             ViewData[nameof(Role)] = Role;

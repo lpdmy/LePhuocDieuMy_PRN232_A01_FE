@@ -1,51 +1,66 @@
+using System.Net.Http.Json;
 using LePhuocDieuMy_PRN232_A01_FE.DTOs;
 using LePhuocDieuMy_PRN232_A01_FE.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace LePhuocDieuMy_PRN232_A01_FE.Pages.NewsArticles
 {
     public class UpdateModel : PageModel
     {
-        private readonly ApiClientHelper _apiHelper;
+        private readonly ApiClientHelper _clientFactory;
+
+        public UpdateModel(ApiClientHelper clientFactory)
+        {
+            _clientFactory = clientFactory;
+        }
 
         [BindProperty]
-        public NewsArticleDTO Article { get; set; } = new();
+        public NewsArticleDTO UpdatedArticle { get; set; } = new();
 
-        public UpdateModel(ApiClientHelper apiHelper)
-        {
-            _apiHelper = apiHelper;
-        }
+        public List<CategoryDTO> Categories { get; set; } = new();
+        public MultiSelectList TagSelectList { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            var client = _apiHelper.CreateAuthorizedClient();
-            var response = await client.GetAsync($"NewsArticles/{id}");
+            var client = _clientFactory.CreateAuthorizedClient();
 
-            if (!response.IsSuccessStatusCode)
-            {
-                return RedirectToPage("Index");
-            }
+            var article = await client.GetFromJsonAsync<NewsArticleDTO>($"NewsArticles/{id}");
+            if (article == null) return NotFound();
 
-            Article = await response.Content.ReadFromJsonAsync<NewsArticleDTO>() ?? new NewsArticleDTO();
+            UpdatedArticle = article;
+
+            // Load categories
+            Categories = await client.GetFromJsonAsync<List<CategoryDTO>>("Category");
+
+            // Load all tags
+            var tags = await client.GetFromJsonAsync<List<TagDTO>>("Tag");
+            TagSelectList = new MultiSelectList(tags, "TagId", "TagName", UpdatedArticle.TagIds);
+
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int id)
+        public async Task<IActionResult> OnPostAsync()
         {
-            var client = _apiHelper.CreateAuthorizedClient();
-            var response = await client.PutAsJsonAsync($"NewsArticles/{id}", Article);
+            if (!ModelState.IsValid) return Page();
 
+            var client = _clientFactory.CreateAuthorizedClient();
+            UpdatedArticle.AccountId = (int)HttpContext.Session.GetInt32("UserId");
+
+            var response = await client.PutAsJsonAsync($"NewsArticles/{UpdatedArticle.NewsArticleId}", UpdatedArticle);
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToPage("Index");
             }
-            else
-            {
-                var error = await response.Content.ReadAsStringAsync();
-                ModelState.AddModelError(string.Empty, "Update failed: " + error);
-                return Page();
-            }
+
+            // Reload dropdowns if update failed
+            Categories = await client.GetFromJsonAsync<List<CategoryDTO>>("Category");
+            var tags = await client.GetFromJsonAsync<List<TagDTO>>("Tag");
+            TagSelectList = new MultiSelectList(tags, "TagId", "TagName", UpdatedArticle.TagIds);
+
+            ModelState.AddModelError(string.Empty, "Update failed.");
+            return Page();
         }
     }
 }
