@@ -30,6 +30,7 @@ namespace LePhuocDieuMy_PRN232_A01_FE.Pages.NewsArticles
             if (article == null) return NotFound();
 
             UpdatedArticle = article;
+            article.NewsArticleId = id;
 
             // Load categories
             Categories = await client.GetFromJsonAsync<List<CategoryDTO>>("Category");
