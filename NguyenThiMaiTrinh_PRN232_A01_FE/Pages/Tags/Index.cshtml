@@ -1,0 +1,41 @@
+﻿@page
+@model NguyenThiMaiTrinh_PRN232_A01_FE.Pages.Tags.IndexModel
+@{
+    ViewData["Title"] = "Tag List";
+}
+
+<h2>Tag List</h2>
+<a asp-page="Create" class="btn btn-primary">Add Tag</a>
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Note</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tag in Model.Tags)
+        {
+            <tr>
+                <td>@tag.TagId</td>
+                <td>@tag.TagName</td>
+                <td>@tag.Note</td>
+                <td>
+                    <a asp-page="Update" asp-route-id="@tag.TagId" class="btn btn-sm btn-warning">Edit</a>
+                </td>
+                <td>
+                    <a asp-page="Update" asp-route-id="@tag.TagId" class="btn btn-sm btn-warning">Edit</a>
+
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@tag.TagId"
+                          onsubmit="return confirm('Are you sure you want to delete this tag?');"
+                          style="display:inline">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

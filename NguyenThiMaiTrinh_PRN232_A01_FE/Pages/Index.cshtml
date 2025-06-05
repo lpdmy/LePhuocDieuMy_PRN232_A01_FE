@@ -1,0 +1,103 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        @if (ViewBag.Role == "Admin")
+        {
+            <h1 class="display-4 fw-bold" style="color: #6f42c1;">Admin Dashboard</h1>
+
+        }
+        @if (ViewBag.Role == "Staff")
+        {
+            <h1 class="display-4 fw-bold" style="color: #6f42c1;">Staff Dashboard</h1>
+
+        }
+        @if (ViewBag.Role == "Lecturer")
+        {
+            <span class="text-muted fst-italic">Lecturer Dashboard!</span>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.UserEmail))
+        {
+            <div class="mx-auto mt-4 p-4 border rounded shadow-sm d-flex align-items-center justify-content-start"
+                 style="max-width: 500px; background: linear-gradient(90deg, #f7f0ff 0%, #ffffff 100%); border-color: #d6bbfc;">
+                <div class="me-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#6f42c1" class="bi bi-person-circle" viewBox="0 0 16 16">
+                        <path d="M13.468 12.37C12.758 11.226 11.541 10.5 10 10.5s-2.758.726-3.468 1.87A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z" />
+                        <path fill-rule="evenodd" d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                        <path fill-rule="evenodd" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z" />
+                    </svg>
+                </div>
+                <div>
+                    <h5 class="mb-1" style="color: #343a40;">Hello, <strong>@Model.UserEmail</strong></h5>
+                    <div style="font-size: 0.9rem; color: #6c757d;">Welcome back to your admin dashboard.</div>
+                </div>
+            </div>
+
+            <div class="mt-5 d-flex flex-wrap gap-3 justify-content-center">
+                @if (ViewBag.Role == "Admin")
+                {
+                    <a asp-page="/Accounts/Index" class="btn px-4 py-2 fw-semibold rounded shadow-sm"
+                       style="background-color: #6f42c1; color: white; border: none;">
+                        Manage Accounts
+                    </a>
+
+                    <a asp-page="/Accounts/Index" class="btn px-4 py-2 fw-semibold rounded shadow-sm"
+                       style="background-color: #b370ef; color: white; border: none;">
+                        News Report
+                    </a>
+                }
+
+                @if (ViewBag.Role == "Staff")
+                {
+                    <a asp-page="/Categories/Index" class="btn px-4 py-2 fw-semibold rounded shadow-sm"
+                       style="background-color: #9f6ae1; color: white; border: none;">
+                        Manage Categories
+                    </a>
+
+                    <a asp-page="/NewsArticles/Index" class="btn px-4 py-2 fw-semibold rounded shadow-sm"
+                       style="background-color: #b78bf4; color: white; border: none;">
+                        Manage News Article
+                    </a>
+
+                    <a asp-page="/Tags/Index" class="btn px-4 py-2 fw-semibold rounded shadow-sm"
+                       style="background-color: #c89cff; color: white; border: none;">
+                        Manage Tags
+                    </a>
+
+                    <a asp-page="/Accounts/Index" class="btn px-4 py-2 fw-semibold rounded shadow-sm"
+                       style="border: 1px solid #6f42c1; color: #6f42c1;">
+                        My Profile
+                    </a>
+
+                    <a asp-page="/Accounts/Index" class="btn px-4 py-2 fw-semibold rounded shadow-sm"
+                       style="border: 1px solid #6f42c1; color: #6f42c1;">
+                        Post History
+                    </a>
+                }
+
+                @if (ViewBag.Role == "Lecturer")
+                {
+                    <span class="text-muted fst-italic">Welcome Lecturer! (Modules coming soon)</span>
+                }
+
+                <form method="post" asp-page="/Auth/Logout" class="d-inline">
+                    <button type="submit" class="btn px-4 py-2 fw-semibold rounded shadow-sm"
+                            style="background-color: #dc3545; color: white; border: none;">
+                        Logout
+                    </button>
+                </form>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-danger mt-4 mx-auto text-center" role="alert" style="max-width: 450px; font-size: 1.25rem;">
+                You are not logged in.
+            </div>
+        }
+    </div>
+</div>

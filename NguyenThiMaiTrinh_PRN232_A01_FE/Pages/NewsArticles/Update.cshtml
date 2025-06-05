@@ -1,0 +1,48 @@
+﻿@page "{id:int}"
+@model NguyenThiMaiTrinh_PRN232_A01_FE.Pages.NewsArticles.UpdateModel
+@{
+    ViewData["Title"] = "Update News Article";
+}
+
+<h2>Update News Article</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="UpdatedArticle.NewsArticleId" />
+
+    <div class="form-group">
+        <label asp-for="UpdatedArticle.NewsTitle"></label>
+        <input asp-for="UpdatedArticle.NewsTitle" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="UpdatedArticle.Headline"></label>
+        <input asp-for="UpdatedArticle.Headline" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="UpdatedArticle.NewsContent"></label>
+        <textarea asp-for="UpdatedArticle.NewsContent" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="UpdatedArticle.CategoryId"></label>
+        <select asp-for="UpdatedArticle.CategoryId" class="form-control"
+                asp-items="@(new SelectList(Model.Categories, "CategoryId", "CategoryName"))">
+            <option value="">-- None --</option>
+        </select>
+        <span asp-validation-for="UpdatedArticle.CategoryId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="tagSelect">Select Tags</label>
+        <select asp-for="UpdatedArticle.TagIds" asp-items="Model.TagSelectList" class="form-control" multiple></select>
+    </div>
+
+    <div class="form-check">
+        <input asp-for="UpdatedArticle.NewsStatus" class="form-check-input" />
+        <label asp-for="UpdatedArticle.NewsStatus" class="form-check-label"></label>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">Update</button>
+    <a asp-page="Index" class="btn btn-secondary mt-2">Cancel</a>
+</form>
