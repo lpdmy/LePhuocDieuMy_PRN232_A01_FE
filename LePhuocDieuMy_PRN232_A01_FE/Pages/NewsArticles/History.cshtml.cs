@@ -1,23 +1,23 @@
-﻿using LePhuocDieuMy_PRN232_A01_FE.DTOs;
+using LePhuocDieuMy_PRN232_A01_FE.DTOs;
 using LePhuocDieuMy_PRN232_A01_FE.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Text.Json.Serialization;
+using System.Security.Claims;
 
 namespace LePhuocDieuMy_PRN232_A01_FE.Pages.NewsArticles
 {
-    public class IndexModel : PageModel
+    public class HistoryModel : PageModel
     {
         private readonly ApiClientHelper _apiHelper;
 
         public List<NewsArticleDTO> NewsArticles { get; set; } = new();
+
         [BindProperty(SupportsGet = true)] public string? SearchKeyword { get; set; }
-        [BindProperty(SupportsGet = true)]
-        public int PageNumber { get; set; } = 1;
+        [BindProperty(SupportsGet = true)] public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 5;
         public int TotalCount { get; set; }
 
-        public IndexModel(ApiClientHelper apiHelper)
+        public HistoryModel(ApiClientHelper apiHelper)
         {
             _apiHelper = apiHelper;
         }
@@ -26,14 +26,24 @@ namespace LePhuocDieuMy_PRN232_A01_FE.Pages.NewsArticles
         {
             var client = _apiHelper.CreateODataAuthorizedClient();
 
-            // Xây dựng query string OData
-            var filter = !string.IsNullOrEmpty(SearchKeyword)
-                ? $"$filter=contains(tolower(NewsTitle),'{SearchKeyword.ToLower()}') or contains(tolower(Headline),'{SearchKeyword.ToLower()}')&"
-                : "";
+            var filters = new List<string>();
+
+            if (!string.IsNullOrEmpty(SearchKeyword))
+            {
+                var keyword = SearchKeyword.ToLower();
+                filters.Add($"contains(tolower(NewsTitle),'{keyword}') or contains(tolower(Headline),'{keyword}')");
+            }
+
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId != null)
+            {
+                filters.Add($"CreatedById eq {userId}");
+            }
+
+            var filterString = filters.Count > 0 ? $"$filter={string.Join(" and ", filters)}&" : "";
 
             var skip = (PageNumber - 1) * PageSize;
-
-            var query = $"NewsArticles?$orderby=CreatedDate desc&{filter}$skip={skip}&$top={PageSize}&$count=true";
+            var query = $"NewsArticles?$orderby=CreatedDate desc&{filterString}$skip={skip}&$top={PageSize}&$count=true";
 
             var response = await client.GetAsync(query);
 
@@ -58,7 +68,5 @@ namespace LePhuocDieuMy_PRN232_A01_FE.Pages.NewsArticles
 
             return RedirectToPage("Index", new { SearchKeyword, PageNumber });
         }
-
     }
-
 }

@@ -35,6 +35,7 @@ namespace LePhuocDieuMy_PRN232_A01_FE.Pages.Categories
             {
                 var error = await response.Content.ReadAsStringAsync();
                 ModelState.AddModelError(string.Empty, "Delete failed: " + error);
+                TempData["ErrorMessage"] = error;
             }
 
             return RedirectToPage();

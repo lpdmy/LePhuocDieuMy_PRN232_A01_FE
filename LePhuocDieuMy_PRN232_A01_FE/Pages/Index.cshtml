@@ -1,5 +1,6 @@
 ﻿@page
 @model IndexModel
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     ViewData["Title"] = "Admin Dashboard";
 }
@@ -19,8 +20,8 @@
                     </svg>
                 </div>
                 <div>
-                    <h5 class="mb-0 text-primary">Hello, <strong>@Model.UserEmail</strong>!</h5>
-                    <small class="text-muted">Welcome back to your admin dashboard.</small>
+                    <h5 class="mb-0 text-primary">Hello, <strong>@HttpContextAccessor.HttpContext.Session.GetString("UserEmail")</strong>!</h5>
+                    <small class="text-muted">Welcome back to your dashboard.</small>
                 </div>
             </div>
 
@@ -31,7 +32,7 @@
                         Manage Accounts
                     </a>
 
-                    <a asp-page="/Accounts/Index" class="btn btn-outline-primary px-4 py-2 fw-semibold shadow-sm rounded">
+                    <a asp-page="/Admin/Report" class="btn btn-outline-primary px-4 py-2 fw-semibold shadow-sm rounded">
                         News Report
                     </a>
                 }
@@ -49,17 +50,19 @@
                         Manage Tags
                     </a>
 
-                    <a asp-page="/Accounts/Index" class="btn btn-outline-primary px-4 py-2 fw-semibold shadow-sm rounded">
+                    <a asp-page="/Profile/Index" class="btn btn-outline-primary px-4 py-2 fw-semibold shadow-sm rounded">
                         My Profile
                     </a>
 
-                    <a asp-page="/Accounts/Index" class="btn btn-outline-primary px-4 py-2 fw-semibold shadow-sm rounded">
+                    <a asp-page="/NewsArticles/History" class="btn btn-outline-primary px-4 py-2 fw-semibold shadow-sm rounded">
                         Post History
                     </a>
                 }
                 @if (ViewBag.Role == "Lecturer")
                 {
-                 
+                    <a asp-page="/Lecturer/Index" class="btn btn-outline-primary px-4 py-2 fw-semibold shadow-sm rounded">
+                        News Articles
+                    </a>
                 }
 
                 <form method="post" asp-page="/Auth/Logout" class="d-inline">

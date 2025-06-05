@@ -33,6 +33,7 @@ namespace LePhuocDieuMy_PRN232_A01_FE.Pages.Categories
 
             var errorContent = await response.Content.ReadAsStringAsync();
             ModelState.AddModelError(string.Empty, "Create failed: " + errorContent);
+            TempData["ErrorMessage"] = errorContent;
             return Page();
         }
 

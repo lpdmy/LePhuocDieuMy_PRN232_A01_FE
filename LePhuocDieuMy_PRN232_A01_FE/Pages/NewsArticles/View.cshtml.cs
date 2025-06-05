@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace LePhuocDieuMy_PRN232_A01_FE.Pages.NewsArticles
 {
-    public class UpdateModel : PageModel
+    public class ViewModel : PageModel
     {
         private readonly ApiClientHelper _clientFactory;
 
-        public UpdateModel(ApiClientHelper clientFactory)
+        public ViewModel(ApiClientHelper clientFactory)
         {
             _clientFactory = clientFactory;
         }
@@ -43,26 +43,5 @@ namespace LePhuocDieuMy_PRN232_A01_FE.Pages.NewsArticles
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid) return Page();
-
-            var client = _clientFactory.CreateAuthorizedClient();
-            UpdatedArticle.AccountId = (int)HttpContext.Session.GetInt32("UserId");
-
-            var response = await client.PutAsJsonAsync($"NewsArticles/{UpdatedArticle.NewsArticleId}", UpdatedArticle);
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToPage("Index");
-            }
-
-            Categories = await client.GetFromJsonAsync<List<CategoryDTO>>("Category");
-            var tags = await client.GetFromJsonAsync<List<TagDTO>>("Tag");
-            TagSelectList = new MultiSelectList(tags, "TagId", "TagName", UpdatedArticle.TagIds);
-            var error = await response.Content.ReadAsStringAsync();
-            ModelState.AddModelError(string.Empty, "Update failed.");
-            TempData["ErrorMessage"] = error;
-            return Page();
-        }
     }
 }

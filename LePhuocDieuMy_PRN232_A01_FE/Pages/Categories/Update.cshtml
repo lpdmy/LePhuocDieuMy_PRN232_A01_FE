@@ -5,7 +5,12 @@
 }
 
 <h2>Edit Category</h2>
-
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
 <form method="post">
     <div class="form-group">
         <label asp-for="UpdatedCategory.CategoryName"></label>

@@ -57,9 +57,10 @@ public class UpdateModel : PageModel
         {
             return RedirectToPage("Index");
         }
-
+        Categories = await client.GetFromJsonAsync<List<CategoryDTO>>("Category");
         var error = await response.Content.ReadAsStringAsync();
         ModelState.AddModelError(string.Empty, "Update failed: " + error);
+        TempData["ErrorMessage"] = error;
         return Page();
     }
 }

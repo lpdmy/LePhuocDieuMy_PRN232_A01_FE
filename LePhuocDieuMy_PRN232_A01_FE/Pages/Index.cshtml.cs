@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Http;
 public class IndexModel : PageModel
 {
     public string? UserEmail { get; private set; }
@@ -39,9 +40,13 @@ public class IndexModel : PageModel
             }
 
             // Lưu email vào Session
-            HttpContext.Session.SetString("UserEmail", UserEmail);
-            HttpContext.Session.SetInt32("UserId", UserId != null ? Convert.ToInt32(UserId) : 0);
-
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("UserEmail"))) {
+                HttpContext.Session.SetString("UserEmail", UserEmail);
+            }
+            if (UserEmail != "Admin")
+            {
+                HttpContext.Session.SetInt32("UserId", UserId != null ? Convert.ToInt32(UserId) : 0);
+            }
 
             ViewData[nameof(UserEmail)] = UserEmail;
             ViewData[nameof(Role)] = Role;

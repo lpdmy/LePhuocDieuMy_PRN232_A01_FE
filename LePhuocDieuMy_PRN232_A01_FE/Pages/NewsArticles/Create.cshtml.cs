@@ -32,6 +32,18 @@ namespace LePhuocDieuMy_PRN232_A01_FE.Pages.NewsArticles
             }
 
             ModelState.AddModelError(string.Empty, "Create failed");
+            var responseCate = await client.GetAsync("Category");
+
+            if (responseCate.IsSuccessStatusCode)
+            {
+                Categories = await response.Content.ReadFromJsonAsync<List<CategoryDTO>>();
+            }
+            else
+            {
+                Categories = new List<CategoryDTO>();
+            }
+            var tags = await client.GetFromJsonAsync<List<TagDTO>>("Tag");
+            TagSelectList = new MultiSelectList(tags, "TagId", "TagName");
             return Page();
         }
 
