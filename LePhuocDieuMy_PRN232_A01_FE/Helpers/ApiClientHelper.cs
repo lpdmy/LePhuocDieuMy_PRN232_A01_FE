@@ -27,5 +27,18 @@ namespace LePhuocDieuMy_PRN232_A01_FE.Services
             }
             return client;
         }
+
+        public HttpClient CreateODataAuthorizedClient()
+        {
+            var token = _httpContextAccessor.HttpContext?.Session.GetString("JWToken");
+
+            var client = _httpClientFactory.CreateClient("odata");
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
+            }
+            return client;
+        }
     }
 }
